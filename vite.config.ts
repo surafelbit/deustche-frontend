@@ -34,33 +34,7 @@ export default defineConfig({
     target: 'es2020',
     minify: 'esbuild',
     sourcemap: false,
-    rollupOptions: {
-      output: {
-        // Simplified chunking strategy to avoid initialization order issues
-        manualChunks: (id) => {
-          // Only split vendor code, let Vite handle the rest automatically
-          if (id.includes('node_modules')) {
-            // Keep React and React DOM together to avoid circular dependencies
-            if (id.includes('react') || id.includes('react-dom') || id.includes('scheduler')) {
-              return 'react-vendor';
-            }
-            
-            // Keep large UI libraries separate
-            if (id.includes('antd')) {
-              return 'antd';
-            }
-            
-            // Keep chart libraries together
-            if (id.includes('chart.js') || id.includes('react-chartjs-2')) {
-              return 'charts';
-            }
-            
-            // All other node_modules go into a single vendor chunk
-            // This prevents circular dependency issues
-            return 'vendor';
-          }
-        },
-      },
-    },
+    // Let Vite handle chunking automatically to avoid initialization order issues
+    // Vite's automatic chunking respects module initialization order
   },
 });
